@@ -19,6 +19,11 @@ namespace PlainElastic.Net
             DefaultPort = uri.Port;
             DefaultScheme = uri.Scheme;
 
+            if(uri.Scheme == "https")
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
+            }
+
             if (!string.IsNullOrEmpty(uri.UserInfo))
             {
                 var userInfoSegements = uri.UserInfo.Split(':');
@@ -120,7 +125,7 @@ namespace PlainElastic.Net
                 if (!jsonData.IsNullOrEmpty())
                 {
                     byte[] buffer = Encoding.UTF8.GetBytes(jsonData);
-                    request.ContentLength = buffer.Length;
+                    request.ContentLength = buffer.Length;                    
                     using (Stream requestStream = request.GetRequestStream())
                     {
                         requestStream.Write(buffer, 0, buffer.Length);
